@@ -1,0 +1,48 @@
+/* General Footer Styling */
+footer {
+    background-color: #ecf0f1; /* Light gray background to match the dashboard */
+    color: #2c3e50;           /* Dark text color to match the overall theme */
+    padding: 20px 0;           /* Padding for top and bottom */
+    text-align: center;        /* Center align the text */
+    font-size: 14px;           /* Slightly smaller font size */
+}
+
+/* Footer container */
+.footer-container {
+    max-width: 1200px;         /* Limit the width of the footer */
+    margin: 0 auto;            /* Center the container */
+    padding: 0 20px;           /* Padding for left and right */
+}
+
+/* Footer Links Styling */
+.footer-links {
+    margin-top: 10px;          /* Space between copyright and links */
+}
+
+.footer-links a {
+    color: #2c3e50;            /* Dark color to match the header and dashboard text */
+    text-decoration: none;     /* Remove underline */
+    margin: 0 10px;            /* Space between links */
+    font-weight: bold;
+    transition: color 0.3s ease; /* Smooth transition for color change */
+}
+
+.footer-links a:hover {
+    color: #4CAF50;            /* Green color on hover to match dashboard style */
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    footer {
+        font-size: 12px;        /* Smaller font on smaller screens */
+    }
+
+    .footer-links {
+        display: block;         /* Stack the links vertically */
+        margin-top: 20px;       /* More space between the text and links */
+    }
+
+    .footer-links a {
+        margin: 5px 0;          /* Vertical margin between links */
+    }
+}

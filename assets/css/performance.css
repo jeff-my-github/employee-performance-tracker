@@ -1,0 +1,95 @@
+/* General Performance Page Styling */
+h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-top: 30px;
+    color: #333;
+}
+
+h3 {
+    font-size: 24px;
+    color: #4CAF50; /* Green color to match the dashboard */
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.employee-list {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.employee {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.employee h4 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form input[type="number"],
+form input[type="month"] {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+form button {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #4CAF50; /* Green button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+form label {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .employee-list {
+        padding: 10px;
+        margin: 0 10px;
+    }
+
+    form input[type="number"],
+    form input[type="month"] {
+        font-size: 14px;
+    }
+
+    form button {
+        font-size: 14px;
+    }
+}
