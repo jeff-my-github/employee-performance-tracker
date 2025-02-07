@@ -1,15 +1,20 @@
 <?php include('header.php'); ?>
 
-<h2>Employee Performance Tracker - Login</h2>
+<!-- Login Section -->
+<div class="login-container">
+    <h2>Employee Performance Tracker - Login</h2>
 
-<!-- Login Form -->
-<div class="login-form">
-    <h3>Login</h3>
-    <form id="login-form">
-        <input type="text" id="username" name="username" placeholder="Username" required />
-        <input type="password" id="password" name="password" placeholder="Password" required />
-        <button type="submit">Login</button>
-    </form>
+    <!-- Login Form -->
+    <div class="login-form">
+        <h3>Login</h3>
+        <form id="login-form">
+            <input type="text" id="username" name="username" placeholder="Username" required />
+            <input type="password" id="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+            <!-- Error message will be displayed here -->
+            <div id="error-message" style="color: red; text-align: center; display: none;">Login failed. Please check your username and password.</div>
+        </form>
+    </div>
 </div>
 
 <!-- Link to the login CSS -->
@@ -19,6 +24,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Handle form submission using AJAX
         const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
         
         if (loginForm) {
             loginForm.addEventListener('submit', function (event) {
@@ -32,7 +38,7 @@
                 data.append('password', password);
                 
                 // Sending login request via AJAX
-                fetch('/employee-performance-tracker/controllers/UserController.php?action=login', {
+                fetch('../controllers/UserController.php?action=login', {
                     method: 'POST',
                     body: data
                 })
@@ -40,12 +46,17 @@
                 .then(data => {
                     if (data.success) {
                         // Redirect to the dashboard after successful login
-                        window.location.href = '/employee-performance-tracker/views/dashboard.php';
+                        window.location.href = '../views/dashboard.php';
                     } else {
-                        alert('Login failed: ' + data.error);
+                        // Show error message if login failed
+                        errorMessage.style.display = 'block';
                     }
                 })
-                .catch(error => alert('Error: ' + error));
+                .catch(error => {
+                    // Handle error
+                    alert('Error: ' + error);
+                    errorMessage.style.display = 'block';
+                });
             });
         }
     });
