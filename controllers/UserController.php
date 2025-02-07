@@ -1,50 +1,59 @@
 <?php
-// Sample UserController.php for handling login requests
+// /controllers/UserController.php
 
-require_once '../models/User.php';
+include_once '../models/User.php';
 
 class UserController {
 
-    // Handle login
-    public function login($username, $password) {
+    // Register a new user
+    public function register() {
+        // Get POST data
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];  // Assuming role is either 'admin' or 'manager'
+
+        // Validate data
+        if (empty($username) || empty($password) || empty($role)) {
+            echo json_encode(['success' => false, 'error' => 'All fields are required']);
+            return;
+        }
+
+        // Check if username already exists
+        $existingUser = User::findByUsername($username);
+        if ($existingUser) {
+            echo json_encode(['success' => false, 'error' => 'Username is already taken']);
+            return;
+        }
+
+        // Hash the password
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Create a new User and save it to the database
         $user = new User();
-        
-        // Validate user credentials
-        $result = $user->checkCredentials($username, $password);
-        
-        if ($result) {
-            echo json_encode(['success' => true]);
+        $user->username = $username;
+        $user->password_hash = $password_hash;
+        $user->role = $role;
+
+        if ($user->save()) {
+            echo json_encode(['success' => true, 'message' => 'Registration successful']);
         } else {
-            echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
+            echo json_encode(['success' => false, 'error' => 'Registration failed']);
         }
     }
 
-    // Handle requests based on the 'action' query parameter
-    public function handleRequest() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $action = isset($_GET['action']) ? $_GET['action'] : null;
+    // Login a user
+    public function login($username, $password) {
+        // Check if the username exists
+        $user = User::findByUsername($username);
 
-            if ($action === 'login') {
-                if (isset($_POST['username'], $_POST['password'])) {
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
-
-                    // Call the login function
-                    $this->login($username, $password);
-                } else {
-                    echo json_encode(['success' => false, 'error' => 'Missing username or password']);
-                }
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Invalid action']);
-            }
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Invalid request method']);
+        if ($user && password_verify($password, $user['password_hash'])) {
+            // Return the user if credentials are valid
+            return $user;
         }
 
-        exit;
+        // Return false if credentials are invalid
+        return false;
     }
 }
 
-// Make sure to call handleRequest to trigger login handling
-$controller = new UserController();
-$controller->handleRequest();
+?>

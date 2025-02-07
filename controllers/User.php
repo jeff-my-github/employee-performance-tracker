@@ -23,7 +23,7 @@ class User {
         $stmt = $db->prepare('SELECT * FROM users WHERE username = :username');
         $stmt->bindParam(':username', $username);
         $stmt->execute();
-        
+            
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
         // If the user exists and the password matches

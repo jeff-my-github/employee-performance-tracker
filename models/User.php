@@ -1,25 +1,38 @@
 <?php
 require_once '../config/config.php';
 
+// /models/User.php
+
 class User {
 
-    public function authenticate($username, $password) {
-        global $pdo;
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->execute([$username]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    public $user_id;
+    public $username;
+    public $password_hash;
+    public $role;
 
-        if ($user && password_verify($password, $user['password_hash'])) {
-            return $user;
-        }
-        return false;
+    // Database connection
+    private static function getDb() {
+        // Ensure you change these credentials if needed
+        return new PDO('mysql:host=localhost;dbname=employee_performance_tracker', 'root', '');
     }
 
-    public function register($username, $password, $role) {
-        global $pdo;
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)");
-        return $stmt->execute([$username, $password_hash, $role]);
+    // Method to find a user by username
+    public static function findByUsername($username) {
+        $db = self::getDb();
+        $stmt = $db->prepare('SELECT * FROM users WHERE username = :username');
+        $stmt->execute(['username' => $username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Method to save a new user to the database
+    public function save() {
+        $db = self::getDb();
+        $stmt = $db->prepare('INSERT INTO users (username, password_hash, role) VALUES (:username, :password_hash, :role)');
+        return $stmt->execute([
+            'username' => $this->username,
+            'password_hash' => $this->password_hash,
+            'role' => $this->role
+        ]);
     }
 }
 ?>
