@@ -7,7 +7,6 @@ $query = "SELECT employee_id, name FROM employees"; // Adjust the table and colu
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $employees = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an associative array
-
 ?>
 
 <link rel="stylesheet" href="../assets/css/performance.css">
@@ -33,8 +32,9 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an assoc
             </div>
 
             <div>
-                <label for="rating-month">Rating Month</label>
-                <input type="month" id="rating-month" name="rating_month" required />
+                <label for="rating-month">Rating Date</label>
+                <!-- Change the input type to "date" to include the day -->
+                <input type="date" id="rating-month" name="rating_month" required />
             </div>
             
             <div>
@@ -58,6 +58,7 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an assoc
 </div>
 
 <?php include('footer.php'); ?>
+
 <script>
 document.getElementById('performance-form').addEventListener('submit', function(e) {
     e.preventDefault(); // Prevent the normal form submission
@@ -65,7 +66,7 @@ document.getElementById('performance-form').addEventListener('submit', function(
     var formData = new FormData(this); // Create FormData object with the form data
 
     // Send the data using fetch to PerformanceController.php
-    fetch('/controllers/PerformanceController.php?action=rate', {
+    fetch('/employee-performance-tracker/controllers/PerformanceController.php?action=rate', {
         method: 'POST',
         body: formData
     })

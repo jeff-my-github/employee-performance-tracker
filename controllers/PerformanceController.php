@@ -44,7 +44,7 @@ class PerformanceController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'rate') {
             // Get POST data
             $employee_id = $_POST['employee_id'];
-            $rating_month = $_POST['rating_month'];
+            $rating_month = $_POST['rating_month'];  // This will now include the full date
             $communication = $_POST['communication'];
             $teamwork = $_POST['teamwork'];
             $productivity = $_POST['productivity'];
