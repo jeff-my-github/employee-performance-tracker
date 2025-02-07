@@ -12,8 +12,8 @@ class User {
 
     // Database connection
     private static function getDb() {
-        // Ensure you change these credentials if needed
-        return new PDO('mysql:host=localhost;dbname=employee_performance_tracker', 'root', '');
+        // Updated the database name to 'employee_performance'
+        return new PDO('mysql:host=localhost;dbname=employee_performance', 'root', '');
     }
 
     // Method to find a user by username

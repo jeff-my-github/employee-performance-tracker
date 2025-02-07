@@ -6,40 +6,24 @@ session_start();
 // Include necessary files
 include_once '../controllers/UserController.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Handle the login request using UserController
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $userController = new UserController();
-    $user = $userController->login($username, $password);
-
-    if ($user) {
-        $_SESSION['user'] = $user;
-        header("Location: dashboard.php");
-        exit();  // Ensure no further code is executed
-    } else {
-        $error = "Invalid credentials!";
-    }
-}
 ?>
 
 <!-- HTML Form -->
-<form method="POST" action="login.php">
+<form id="login-form">
     <input type="text" name="username" placeholder="Username" required />
     <input type="password" name="password" placeholder="Password" required />
     <button type="submit">Login</button>
 </form>
 
-<?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
+<!-- Error Message -->
+<div id="error-message" style="color: red; text-align: center;"></div>
 
-<!-- Include JS for AJAX-based login -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginForm = document.querySelector('form');
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginForm = document.getElementById('login-form');
         const errorMessage = document.getElementById('error-message');
 
-        loginForm.addEventListener('submit', function(event) {
+        loginForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
             const username = document.querySelector('input[name="username"]').value;
@@ -49,24 +33,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             data.append('username', username);
             data.append('password', password);
 
-            fetch('login.php', {
+            // Send login request via AJAX
+            fetch('../controllers/UserController.php?action=login', {
                 method: 'POST',
                 body: data
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                if (data.includes('Invalid credentials')) {
-                    errorMessage.innerHTML = "Invalid credentials!";
+                if (data.success) {
+                    // If login is successful, redirect to dashboard
+                    alert(data.message);
+                    window.location.href = 'dashboard.php';
                 } else {
-                    window.location.href = "dashboard.php"; // Redirect to dashboard
+                    // If login failed, show error message
+                    errorMessage.style.display = 'block';
+                    errorMessage.innerText = data.error;
                 }
             })
             .catch(error => {
+                // Handle errors from AJAX request
                 console.error('Error:', error);
-                errorMessage.innerHTML = "An error occurred!";
+                errorMessage.style.display = 'block';
+                errorMessage.innerText = 'An error occurred. Please try again.';
             });
         });
     });
 </script>
-
-<div id="error-message" style="color: red; text-align: center;"></div>
