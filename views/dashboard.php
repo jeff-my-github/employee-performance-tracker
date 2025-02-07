@@ -27,10 +27,26 @@
 // Handle form submission using AJAX
 document.addEventListener('DOMContentLoaded', function () {
     const employeeForm = document.getElementById('employee-form');
+    const submitButton = employeeForm.querySelector('button');
+
+    // Flag to ensure that the form can only be submitted once
+    let isSubmitting = false;
+    
     if (employeeForm) {
         employeeForm.addEventListener('submit', function (event) {
-            event.preventDefault();
+            event.preventDefault();  // Prevent default form submission
             
+            // Check if the form is already being submitted
+            if (isSubmitting) {
+                return;  // Prevent submission if it's already in progress
+            }
+            
+            // Mark the form as being submitted
+            isSubmitting = true;
+            
+            // Disable the submit button to prevent multiple submissions
+            submitButton.disabled = true;
+
             const name = document.getElementById('employee-name').value;
             const department = document.getElementById('employee-department').value;
             const position = document.getElementById('employee-position').value;
@@ -50,12 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     alert('Employee added successfully');
-                    // Optionally, you can reset the form or update the UI
+                    employeeForm.reset();  // Reset the form after successful addition
                 } else {
                     alert('Failed to add employee: ' + data.error);
                 }
             })
-            .catch(error => alert('Error: ' + error));
+            .catch(error => alert('Error: ' + error))
+            .finally(() => {
+                // Re-enable the submit button after the submission is complete
+                submitButton.disabled = false;
+                // Reset the flag so the form can be submitted again
+                isSubmitting = false;
+            });
         });
     }
 });

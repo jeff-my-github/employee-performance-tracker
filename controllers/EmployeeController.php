@@ -1,4 +1,6 @@
 <?php
+// EmployeeController.php
+
 require_once '../models/Employee.php';
 
 class EmployeeController {
@@ -6,9 +8,19 @@ class EmployeeController {
     // Add a new employee
     public function addEmployee($name, $department, $position, $hire_date) {
         $employee = new Employee();
-        // Ensure the method adds the employee successfully
-        return $employee->add($name, $department, $position, $hire_date);
+        try {
+            // Call the add method from the Employee model
+            return $employee->add($name, $department, $position, $hire_date);
+        } catch (PDOException $e) {
+            // Check if the error is due to a duplicate entry (based on name)
+            if ($e->getCode() == 23000) {  // Error code for duplicate entry in MySQL
+                return ['success' => false, 'error' => 'Employee name already exists'];
+            }
+            // For other errors, return a general error
+            return ['success' => false, 'error' => 'Database error: ' . $e->getMessage()];
+        }
     }
+    
 
     // Handle requests based on the 'action' query parameter
     public function handleRequest() {

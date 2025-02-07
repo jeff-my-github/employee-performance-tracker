@@ -42,21 +42,24 @@
                     method: 'POST',
                     body: data
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then(response => {
+                    console.log('Raw Response:', response); // Log the response
+                    return response.text(); // Read response as text
+                })
+                .then(responseText => {
+                    console.log('Response Text:', responseText); // Log the response text
+                    const data = JSON.parse(responseText); // Manually parse the response
                     if (data.success) {
-                        // Redirect to the dashboard after successful login
                         window.location.href = '../views/dashboard.php';
                     } else {
-                        // Show error message if login failed
                         errorMessage.style.display = 'block';
                     }
                 })
                 .catch(error => {
-                    // Handle error
                     alert('Error: ' + error);
                     errorMessage.style.display = 'block';
                 });
+
             });
         }
     });

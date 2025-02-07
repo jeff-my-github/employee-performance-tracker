@@ -53,24 +53,38 @@ class UserController {
         ob_end_flush();
     }
 
-    // Login a user
-    public function login($username, $password) {
-        // Check if the username exists
+
+        // Login a user
+        public function login() {
+        // Set the header to JSON response
+        header('Content-Type: application/json');
+        
+        // Get POST data
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        // Validate data
+        if (empty($username) || empty($password)) {
+            echo json_encode(['success' => false, 'error' => 'Both username and password are required']);
+            return;
+        }
+
+        // Attempt to find the user
         $user = User::findByUsername($username);
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            // Return the user if credentials are valid
-            return $user;
+            // User found and password matches
+            echo json_encode(['success' => true, 'message' => 'Login successful']);
+        } else {
+            // User not found or password does not match
+            echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
         }
-
-        // Return false if credentials are invalid
-        return false;
+        }
     }
-}
 
-// Initialize the controller and call the register method
-if (isset($_GET['action']) && $_GET['action'] == 'register') {
+    // Call the login method if the 'action' is 'login'
+    if (isset($_GET['action']) && $_GET['action'] === 'login') {
     $controller = new UserController();
-    $controller->register();
-}
+    $controller->login();
+    }
 ?>

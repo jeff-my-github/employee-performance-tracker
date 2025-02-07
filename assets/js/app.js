@@ -24,7 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: data
             })
-            .then(response => response.json())
+            .then(response => {
+                // Log the response body to check if it's valid JSON
+                return response.text().then(text => {
+                    console.log(text);  // This will show what the server is returning
+                    return JSON.parse(text);  // Only attempt to parse if it's valid JSON
+                });
+            })
             .then(data => {
                 if (data.success) {
                     alert('Employee added successfully');
@@ -33,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Failed to add employee: ' + data.error);
                 }
             })
-            .catch(error => alert('Error: ' + error));
+            .catch(error => alert('Error: ' + error));            
         });
     }
 
