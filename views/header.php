@@ -41,12 +41,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="../views/export.php">Export Data</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../views/login.php">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../views/register.php">Register</a>
-                    </li>
                 </ul>
             </nav>
         </div>
